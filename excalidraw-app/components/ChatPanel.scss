@@ -1,0 +1,97 @@
+.prompt-overlay {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(680px, calc(100% - 2rem));
+  z-index: 10;
+  pointer-events: none;
+
+  &__status {
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--color-primary, #6965db);
+    margin-bottom: 0.4rem;
+    pointer-events: none;
+  }
+
+  &__box {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    background: var(--island-bg-color, #fff);
+    border: 1px solid var(--color-surface-lowest, #e5e7eb);
+    border-radius: 0.75rem;
+    padding: 0.625rem 0.75rem;
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.08),
+      0 2px 4px -1px rgba(0, 0, 0, 0.04);
+    pointer-events: all;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus-within {
+      border-color: var(--color-primary, #6965db);
+      box-shadow:
+        0 0 0 3px rgba(105, 101, 219, 0.12),
+        0 4px 6px -1px rgba(0, 0, 0, 0.08);
+    }
+  }
+
+  &__input {
+    flex: 1;
+    resize: none;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: var(--ui-font, system-ui, sans-serif);
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-on-surface, #111);
+    overflow-y: hidden;
+    min-height: 24px;
+
+    &::placeholder {
+      color: var(--color-text-secondary, #9ca3af);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__btn {
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 0.5rem;
+    background: var(--color-primary, #6965db);
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, opacity 0.15s;
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary-darker, #5b57c8);
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+}
+
+.theme--dark .prompt-overlay {
+  &__box {
+    background: var(--color-surface-low, #1e1e2e);
+    border-color: var(--color-surface-lowest, #374151);
+  }
+
+  &__input {
+    color: var(--color-on-surface, #e5e7eb);
+  }
+}
