@@ -19,6 +19,7 @@ interface StrokeData {
   points: number[][];
   color: string;
   strokeWidth: number;
+  closed?: boolean;
 }
 
 interface LabelData {
@@ -31,14 +32,12 @@ interface LabelData {
 
 // ─── Chuẩn bị: tạo full Excalidraw elements 1 lần (có đầy đủ internal fields)
 function prepareElements(strokes: StrokeData[], labels: LabelData[]) {
-  // Tạo skeleton cho freedraw elements với FULL points
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const skeletons: any[] = [];
   const smoothData: { relative: number[][]; minX: number; minY: number }[] = [];
 
   for (let i = 0; i < strokes.length; i++) {
     const s = strokes[i];
-    // SVG paths đã có bezier curves mượt → dùng trực tiếp, không thêm spline
     const pts = s.points;
     const xs = pts.map((pt: number[]) => pt[0]);
     const ys = pts.map((pt: number[]) => pt[1]);
@@ -50,8 +49,9 @@ function prepareElements(strokes: StrokeData[], labels: LabelData[]) {
 
     smoothData.push({ relative, minX, minY });
 
+    // line element với roundness type 3 → Excalidraw tự bẻ cong qua waypoints
     skeletons.push({
-      type: "freedraw",
+      type: "line",
       id: `stroke-${i}`,
       x: minX,
       y: minY,
@@ -59,22 +59,25 @@ function prepareElements(strokes: StrokeData[], labels: LabelData[]) {
       height: maxY - minY,
       points: relative,
       strokeColor: s.color,
-      strokeWidth: 1,
-      fillStyle: "solid",
+      strokeWidth: s.strokeWidth ?? 2,
+      fillStyle: "hachure",
       roughness: 0,
       opacity: 100,
-      simulatePressure: false,
-      pressures: [],
       strokeStyle: "solid",
       backgroundColor: "transparent",
       angle: 0,
       groupIds: [],
       frameId: null,
-      roundness: null,
+      roundness: { type: 3 },
       boundElements: null,
       link: null,
       locked: false,
       isDeleted: false,
+      lastCommittedPoint: null,
+      startBinding: null,
+      endBinding: null,
+      startArrowhead: null,
+      endArrowhead: null,
     });
   }
 
