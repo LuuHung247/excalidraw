@@ -256,7 +256,9 @@ export const ChatPanel = ({ excalidrawAPI }: Props) => {
         return;
       }
 
-      const data = await res.json();
+      setStatus("Agent đang vẽ...");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const data: any = await res.json();
 
       if (!data.success) {
         setStatus(data.error || "Agent lỗi");
